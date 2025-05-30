@@ -1,0 +1,22 @@
+version: '3'
+services: 
+  blog-api:
+    build:
+      context: .
+    working_dir: /app
+    command: sh -c "python manage.py runserver 0.0.0.0:8000"
+    ports:
+      - "8001:8000"
+    depends_on:
+      - blog-data
+  blog-data:
+    image: 'postgres:14'
+    env_file: .env
+    environment:
+        POSTGRES_DB: '${NAME_DB}'
+        POSTGRES_USER: '${USER_DB}'
+        POSTGRES_PASSWORD: '${PASSWORD_DB}'
+    volumes:
+        - "pg-data:/var/lib/postgresql/data"
+volumes:
+  pg-data:
